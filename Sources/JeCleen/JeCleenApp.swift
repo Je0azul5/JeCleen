@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct CleanUPApp: App {
+struct JeCleenApp: App {
     @State private var model = AppModel()
     var body: some Scene {
         WindowGroup {

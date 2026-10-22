@@ -5,7 +5,7 @@ import SwiftUI
 struct StorageView: View {
     @Bindable var model: StorageModel
     @State private var showWarnings = false
-    private let colors: [Color] = [accent, .init(red: 0.57, green: 0.72, blue: 0.97), .init(red: 0.93, green: 0.69, blue: 0.43), .init(red: 0.74, green: 0.60, blue: 0.91), .init(red: 0.37, green: 0.76, blue: 0.72), .pink, .yellow, .gray]
+    private let colors: [Color] = [accent, .init(red: 0.57, green: 0.43, blue: 0.90), .init(red: 0.88, green: 0.61, blue: 0.86), .init(red: 0.64, green: 0.64, blue: 0.96), .init(red: 0.82, green: 0.73, blue: 0.98), .init(red: 0.72, green: 0.42, blue: 0.70), .init(red: 0.48, green: 0.35, blue: 0.70), .init(red: 0.43, green: 0.38, blue: 0.51)]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {

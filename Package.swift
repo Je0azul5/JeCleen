@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "CleanUP",
+    name: "JeCleen",
     platforms: [.macOS(.v14)],
-    products: [.executable(name: "CleanUP", targets: ["CleanUP"])],
+    products: [.executable(name: "JeCleen", targets: ["JeCleen"])],
     targets: [
         .target(name: "CleanCore"),
-        .executableTarget(name: "CleanUP", dependencies: ["CleanCore"]),
+        .executableTarget(name: "JeCleen", dependencies: ["CleanCore"]),
         .testTarget(name: "CleanCoreTests", dependencies: ["CleanCore"])
     ]
 )

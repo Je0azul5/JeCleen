@@ -5,20 +5,20 @@
             "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder:CleanUP}",
-            "name": "Debug CleanUP",
-            "target": "CleanUP",
+            "name": "Debug JeCleen",
+            "target": "JeCleen",
             "configuration": "debug",
-            "preLaunchTask": "swift: Build Debug CleanUP"
+            "preLaunchTask": "swift: Build Debug JeCleen"
         },
         {
             "type": "swift",
             "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder:CleanUP}",
-            "name": "Release CleanUP",
-            "target": "CleanUP",
+            "name": "Release JeCleen",
+            "target": "JeCleen",
             "configuration": "release",
-            "preLaunchTask": "swift: Build Release CleanUP"
+            "preLaunchTask": "swift: Build Release JeCleen"
         }
     ]
 }

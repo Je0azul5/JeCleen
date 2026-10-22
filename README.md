@@ -1,4 +1,4 @@
-# CleanUP
+# JeCleen
 
 App nativa para macOS, escrita en SwiftUI, para revisar archivos antiguos y consultar memoria y procesos. Interfaz en español, sin dependencias externas y sin servicios en la nube.
 
@@ -8,10 +8,10 @@ Requiere macOS 14 o posterior y Swift 6 (Xcode o Command Line Tools).
 
 ```sh
 bash scripts/build-app.sh
-open dist/CleanUP.app
+open dist/JeCleen.app
 ```
 
-Para desarrollo: `swift run CleanUP`. Abre `Package.swift` en Xcode si prefieres usar el depurador. Para ejecutar las pruebas: `swift test`.
+Para desarrollo: `swift run JeCleen`. Abre `Package.swift` en Xcode si prefieres usar el depurador. Para ejecutar las pruebas: `swift test`.
 
 ## Funciones
 
@@ -19,7 +19,7 @@ Para desarrollo: `swift run CleanUP`. Abre `Package.swift` en Xcode si prefieres
 - **Almacenamiento:** analiza el usuario, Aplicaciones, el disco de datos o una carpeta elegida. Muestra tamaños por carpeta, distribución porcentual y los 20 archivos más grandes de todo el árbol. Permite entrar en subcarpetas, regresar, buscar, filtrar carpetas y mostrar elementos en Finder. El análisis funciona en segundo plano, muestra avances y se puede cancelar conservando los resultados parciales.
 - **Limpieza:** analiza archivos no vacíos de `~/Library/Caches` y `~/Library/Logs` sin cambios durante al menos siete días. Permite filtrar, buscar, mostrar en Finder y seleccionar archivos individualmente. Nada se selecciona automáticamente.
 - **Memoria:** muestra la memoria física, una estimación disponible y la memoria comprimida. Ordena los 12 mayores consumidores agrupando cada app con los procesos auxiliares dentro de su paquete; cada grupo se despliega para ver sus PID. Permite solicitar el cierre normal de aplicaciones abiertas para reducir su consumo.
-- **Procesos:** consulta PID, memoria residente y CPU, ordenados por memoria. Actualiza cada cinco segundos. Solo permite cerrar aplicaciones de usuario con interfaz; excluye Finder y CleanUP.
+- **Procesos:** consulta PID, memoria residente y CPU, ordenados por memoria. Actualiza cada cinco segundos. Solo permite cerrar aplicaciones de usuario con interfaz; excluye Finder y JeCleen.
 
 ## Limpieza y límites
 

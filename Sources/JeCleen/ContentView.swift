@@ -2,10 +2,10 @@ import AppKit
 import CleanCore
 import SwiftUI
 
-let accent = Color(red: 0.73, green: 0.94, blue: 0.43)
-let canvasColor = Color(red: 0.065, green: 0.078, blue: 0.078)
-let surface = Color(red: 0.10, green: 0.12, blue: 0.12)
-let muted = Color(red: 0.59, green: 0.64, blue: 0.62)
+let accent = Color(red: 0.77, green: 0.63, blue: 1.0)
+let canvasColor = Color(red: 0.063, green: 0.043, blue: 0.102)
+let surface = Color(red: 0.129, green: 0.090, blue: 0.184)
+let muted = Color(red: 0.71, green: 0.65, blue: 0.78)
 
 struct ContentView: View {
     @Bindable var model: AppModel
@@ -32,7 +32,7 @@ struct ContentView: View {
                     Circle().fill(model.lastUpdate == nil ? muted : accent).frame(width: 5, height: 5)
                     Text(model.page == .storage ? "Almacenamiento · análisis manual por carpeta" : model.lastUpdate == nil ? "Conectando con tu Mac…" : "Datos locales · actualización cada 5 segundos")
                     Spacer()
-                    Text("CleanUP  /  1.0").monospaced()
+                    Text("JeCleen  /  1.0").monospaced()
                 }.font(.system(size: 10)).foregroundStyle(muted).padding(.horizontal, 32).padding(.vertical, 13)
             }
         }
@@ -53,7 +53,7 @@ struct ContentView: View {
         } message: {
             Text("Se solicitará cerrar \(model.appToClose?.name ?? "la aplicación"). Guarda tu trabajo antes de continuar. La aplicación puede pedirte guardar los documentos abiertos.")
         }
-        .alert("CleanUP", isPresented: Binding(get: { model.message != nil }, set: { if !$0 { model.message = nil } })) {
+        .alert("JeCleen", isPresented: Binding(get: { model.message != nil }, set: { if !$0 { model.message = nil } })) {
             Button("Entendido") { model.message = nil }
         } message: { Text(model.message ?? "") }
         .sheet(isPresented: $showWarnings) {
@@ -77,7 +77,7 @@ struct ContentView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 10) {
                 Image(systemName: "leaf.fill").font(.system(size: 24, weight: .semibold)).foregroundStyle(accent)
-                Text("CleanUP").font(.system(size: 24, weight: .bold, design: .rounded)).tracking(-1)
+                Text("JeCleen").font(.system(size: 24, weight: .bold, design: .rounded)).tracking(-1)
             }.padding(.top, 52).padding(.bottom, 44).padding(.horizontal, 25)
             Text("TU ESPACIO, EN ORDEN").font(.system(size: 9, weight: .semibold)).tracking(1.5)
                 .foregroundStyle(muted).padding(.horizontal, 25).padding(.bottom, 16)
@@ -109,7 +109,7 @@ struct ContentView: View {
             Divider().overlay(.white.opacity(0.04)).padding(.horizontal, 20)
             Label(Host.current().localizedName ?? "Mi Mac", systemImage: "laptopcomputer")
                 .font(.system(size: 11)).foregroundStyle(muted).lineLimit(1).padding(23)
-        }.frame(width: 222).background(Color(red: 0.08, green: 0.095, blue: 0.095))
+        }.frame(width: 222).background(Color(red: 0.090, green: 0.063, blue: 0.137))
             .overlay(alignment: .trailing) { Rectangle().fill(.white.opacity(0.055)).frame(width: 1) }
     }
 
@@ -166,8 +166,8 @@ struct ContentView: View {
                 .overlay(RoundedRectangle(cornerRadius: 18).stroke(accent.opacity(0.16), lineWidth: 1))
             HStack(spacing: 16) {
                 metricCard("Almacenamiento", symbol: "internaldrive", value: model.snapshot.diskTotal == 0 ? "—" : byteString(model.snapshot.diskFree), subtitle: "disponibles", fraction: model.snapshot.diskTotal == 0 ? 0 : 1 - Double(model.snapshot.diskFree) / Double(model.snapshot.diskTotal), color: accent)
-                metricCard("Memoria en uso", symbol: "memorychip", value: model.lastUpdate == nil ? "—" : byteString(Int64(model.snapshot.memoryUsed)), subtitle: "de \(byteString(Int64(model.snapshot.memoryTotal))) · estimación", fraction: model.snapshot.memoryFraction, color: Color(red: 0.64, green: 0.74, blue: 0.99))
-                metricCard("Procesos", symbol: "waveform.path.ecg", value: model.lastUpdate == nil ? "—" : "\(model.snapshot.processes.count)", subtitle: "activos en el sistema", fraction: nil, color: .orange)
+                metricCard("Memoria en uso", symbol: "memorychip", value: model.lastUpdate == nil ? "—" : byteString(Int64(model.snapshot.memoryUsed)), subtitle: "de \(byteString(Int64(model.snapshot.memoryTotal))) · estimación", fraction: model.snapshot.memoryFraction, color: Color(red: 0.65, green: 0.55, blue: 0.98))
+                metricCard("Procesos", symbol: "waveform.path.ecg", value: model.lastUpdate == nil ? "—" : "\(model.snapshot.processes.count)", subtitle: "activos en el sistema", fraction: nil, color: Color(red: 0.89, green: 0.57, blue: 0.85))
             }
             Button("Explorar almacenamiento por carpetas", systemImage: "chart.bar.xaxis") { model.page = .storage }
                 .buttonStyle(.borderless).foregroundStyle(accent).font(.system(size: 12))
