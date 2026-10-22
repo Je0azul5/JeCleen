@@ -1,5 +1,6 @@
 import AppKit
 import Darwin
+import CleanCore
 import Foundation
 
 struct SystemSnapshot: Sendable {
@@ -58,14 +59,6 @@ struct SystemSnapshot: Sendable {
         } catch { snapshot.error = error.localizedDescription }
         return snapshot
     }
-}
-
-struct ProcessRow: Identifiable, Sendable {
-    let id: Int32
-    let name: String
-    let path: String
-    let memory: Int64
-    let cpu: Double
 }
 
 func byteString(_ value: Int64) -> String {

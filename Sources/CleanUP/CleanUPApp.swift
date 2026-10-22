@@ -14,6 +14,8 @@ struct CleanUPApp: App {
         .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(after: .newItem) {
+                Button("Explorar almacenamiento") { model.page = .storage }
+                    .keyboardShortcut("s", modifiers: [.command, .shift])
                 Button("Analizar archivos") { model.page = .cleanup; model.scan() }
                     .keyboardShortcut("r", modifiers: [.command])
                     .disabled(model.scanning || model.cleaning)

@@ -3,11 +3,12 @@ import CleanCore
 import SwiftUI
 
 enum Page: String, CaseIterable, Identifiable {
-    case overview, cleanup, memory, processes
+    case overview, storage, cleanup, memory, processes
     var id: String { rawValue }
     var title: String {
         switch self {
         case .overview: "Vista general"
+        case .storage: "Almacenamiento"
         case .cleanup: "Limpieza"
         case .memory: "Memoria"
         case .processes: "Procesos"
@@ -16,6 +17,7 @@ enum Page: String, CaseIterable, Identifiable {
     var icon: String {
         switch self {
         case .overview: "square.grid.2x2"
+        case .storage: "internaldrive"
         case .cleanup: "sparkles"
         case .memory: "memorychip"
         case .processes: "waveform.path.ecg"
@@ -26,6 +28,8 @@ enum Page: String, CaseIterable, Identifiable {
 @MainActor @Observable
 final class AppModel {
     var page = Page.overview
+    var storage = StorageModel()
+    var memoryGroups: [MemoryGroup] = []
     var snapshot = SystemSnapshot()
     var files: [JunkFile] = []
     var selected: Set<String> = []
@@ -62,6 +66,7 @@ final class AppModel {
                 let value = await Task.detached(priority: .utility) { SystemSnapshot.read() }.value
                 guard let self else { return }
                 self.snapshot = value
+                self.memoryGroups = MemoryGroup.group(value.processes)
                 self.lastUpdate = Date()
                 try? await Task.sleep(for: .seconds(5))
             }

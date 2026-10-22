@@ -2,10 +2,10 @@ import AppKit
 import CleanCore
 import SwiftUI
 
-private let accent = Color(red: 0.73, green: 0.94, blue: 0.43)
-private let canvasColor = Color(red: 0.065, green: 0.078, blue: 0.078)
-private let surface = Color(red: 0.10, green: 0.12, blue: 0.12)
-private let muted = Color(red: 0.59, green: 0.64, blue: 0.62)
+let accent = Color(red: 0.73, green: 0.94, blue: 0.43)
+let canvasColor = Color(red: 0.065, green: 0.078, blue: 0.078)
+let surface = Color(red: 0.10, green: 0.12, blue: 0.12)
+let muted = Color(red: 0.59, green: 0.64, blue: 0.62)
 
 struct ContentView: View {
     @Bindable var model: AppModel
@@ -20,6 +20,7 @@ struct ContentView: View {
                     VStack(alignment: .leading, spacing: 24) {
                         switch model.page {
                         case .overview: overview
+                        case .storage: StorageView(model: model.storage)
                         case .cleanup: cleanup
                         case .memory: memory
                         case .processes: processes
@@ -29,7 +30,7 @@ struct ContentView: View {
                 }
                 HStack(spacing: 7) {
                     Circle().fill(model.lastUpdate == nil ? muted : accent).frame(width: 5, height: 5)
-                    Text(model.lastUpdate == nil ? "Conectando con tu Mac…" : "Datos locales · actualización cada 5 segundos")
+                    Text(model.page == .storage ? "Almacenamiento · análisis manual por carpeta" : model.lastUpdate == nil ? "Conectando con tu Mac…" : "Datos locales · actualización cada 5 segundos")
                     Spacer()
                     Text("CleanUP  /  1.0").monospaced()
                 }.font(.system(size: 10)).foregroundStyle(muted).padding(.horizontal, 32).padding(.vertical, 13)
@@ -87,6 +88,7 @@ struct ContentView: View {
                     HStack(spacing: 12) {
                         Image(systemName: page.icon).font(.system(size: 16)).frame(width: 21)
                         Text(page.title).font(.system(size: 13, weight: model.page == page ? .semibold : .medium))
+                            .lineLimit(1).minimumScaleFactor(0.8)
                         Spacer()
                         if model.page == page { Circle().fill(accent).frame(width: 5, height: 5) }
                     }
@@ -167,6 +169,8 @@ struct ContentView: View {
                 metricCard("Memoria en uso", symbol: "memorychip", value: model.lastUpdate == nil ? "—" : byteString(Int64(model.snapshot.memoryUsed)), subtitle: "de \(byteString(Int64(model.snapshot.memoryTotal))) · estimación", fraction: model.snapshot.memoryFraction, color: Color(red: 0.64, green: 0.74, blue: 0.99))
                 metricCard("Procesos", symbol: "waveform.path.ecg", value: model.lastUpdate == nil ? "—" : "\(model.snapshot.processes.count)", subtitle: "activos en el sistema", fraction: nil, color: .orange)
             }
+            Button("Explorar almacenamiento por carpetas", systemImage: "chart.bar.xaxis") { model.page = .storage }
+                .buttonStyle(.borderless).foregroundStyle(accent).font(.system(size: 12))
             HStack {
                 VStack(alignment: .leading, spacing: 7) {
                     Text("Pequeños hábitos, un Mac más ligero.").font(.system(size: 14, weight: .medium))
@@ -270,6 +274,7 @@ struct ContentView: View {
                 }.frame(maxWidth: .infinity)
             }.padding(26).background(surface, in: RoundedRectangle(cornerRadius: 16))
             notice("macOS administra la RAM automáticamente. La estimación disponible incluye páginas libres e inactivas; no mide la presión de memoria. Cerrar una app puede liberar recursos, según lo que macOS necesite.", symbol: "info.circle")
+            memoryConsumers
             HStack {
                 Text("APLICACIONES ABIERTAS").font(.system(size: 10, weight: .semibold)).tracking(1.5).foregroundStyle(muted)
                 Spacer()
@@ -284,6 +289,42 @@ struct ContentView: View {
                     ForEach(model.closableApps) { row in processRow(row, allowClose: true) }
                 }.background(surface, in: RoundedRectangle(cornerRadius: 12))
             }
+        }
+    }
+
+    private var memoryConsumers: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text("DÓNDE SE VA LA RAM").font(.system(size: 10, weight: .semibold)).tracking(1.5).foregroundStyle(muted)
+                Spacer()
+                Button("Todos los procesos", systemImage: "arrow.up.right") { model.page = .processes }
+                    .font(.system(size: 11)).buttonStyle(.borderless).foregroundStyle(accent)
+            }
+            Text("Los 12 mayores consumidores. Cada app incluye los procesos auxiliares que están dentro de su paquete. La suma de memoria residente puede contar páginas compartidas varias veces; no equivale al total de RAM en uso.")
+                .font(.system(size: 11)).foregroundStyle(muted).lineSpacing(3)
+            VStack(spacing: 0) {
+                ForEach(Array(model.memoryGroups.prefix(12))) { group in
+                    DisclosureGroup {
+                        ForEach(group.processes) { row in processRow(row, allowClose: model.canClose(row)) }
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: group.bundleURL == nil ? "terminal" : "app.fill")
+                                .foregroundStyle(accent).frame(width: 24)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(group.name).font(.system(size: 12, weight: .medium)).lineLimit(1)
+                                Text("\(group.processes.count) \(group.processes.count == 1 ? "proceso" : "procesos")").font(.system(size: 10)).foregroundStyle(muted)
+                            }
+                            Spacer()
+                            GeometryReader { geo in
+                                Capsule().fill(.white.opacity(0.04))
+                                Capsule().fill(accent.opacity(0.7)).frame(width: geo.size.width * min(1, Double(group.memory) / Double(max(1, model.snapshot.memoryTotal))))
+                            }.frame(width: 100, height: 4)
+                            Text(byteString(group.memory)).font(.system(size: 12)).monospacedDigit().frame(width: 95, alignment: .trailing)
+                        }.padding(.vertical, 10)
+                    }.padding(.horizontal, 16).padding(.vertical, 4)
+                    Divider().opacity(0.15)
+                }
+            }.background(surface, in: RoundedRectangle(cornerRadius: 12))
         }
     }
 
@@ -347,7 +388,7 @@ struct ContentView: View {
             Text(byteString(row.memory)).frame(width: 95, alignment: .trailing)
             if allowClose {
                 Button("Cerrar") { model.appToClose = row }.buttonStyle(.bordered).controlSize(.small).frame(width: 75)
-            } else { Text("Sistema").foregroundStyle(muted).font(.system(size: 10)).frame(width: 75) }
+            } else { Text("Consulta").foregroundStyle(muted).font(.system(size: 10)).frame(width: 75) }
         }.font(.system(size: 11)).monospacedDigit().padding(.horizontal, 16).padding(.vertical, 12)
             .help(row.path).overlay(alignment: .bottom) { Divider().opacity(0.15).padding(.leading, 54) }
     }
@@ -410,7 +451,7 @@ struct ContentView: View {
     }
 }
 
-private struct PrimaryButton: ButtonStyle {
+struct PrimaryButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label.font(.system(size: 12, weight: .semibold)).foregroundStyle(canvasColor)
             .padding(.horizontal, 18).padding(.vertical, 12)
