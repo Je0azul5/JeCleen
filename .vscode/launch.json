@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:CleanUP}",
+            "name": "Debug CleanUP",
+            "target": "CleanUP",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug CleanUP"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:CleanUP}",
+            "name": "Release CleanUP",
+            "target": "CleanUP",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release CleanUP"
+        }
+    ]
+}
