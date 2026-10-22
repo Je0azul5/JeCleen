@@ -3,13 +3,14 @@ import CleanCore
 import SwiftUI
 
 enum Page: String, CaseIterable, Identifiable {
-    case overview, storage, cleanup, memory, processes
+    case overview, storage, cleanup, emptyFolders, memory, processes
     var id: String { rawValue }
     var title: String {
         switch self {
         case .overview: "Vista general"
         case .storage: "Almacenamiento"
         case .cleanup: "Limpieza"
+        case .emptyFolders: "Carpetas vacías"
         case .memory: "Memoria"
         case .processes: "Procesos"
         }
@@ -19,6 +20,7 @@ enum Page: String, CaseIterable, Identifiable {
         case .overview: "square.grid.2x2"
         case .storage: "internaldrive"
         case .cleanup: "sparkles"
+        case .emptyFolders: "folder.badge.minus"
         case .memory: "memorychip"
         case .processes: "waveform.path.ecg"
         }
@@ -29,6 +31,7 @@ enum Page: String, CaseIterable, Identifiable {
 final class AppModel {
     var page = Page.overview
     var storage = StorageModel()
+    var emptyFolders = EmptyFoldersModel()
     var memoryGroups: [MemoryGroup] = []
     var snapshot = SystemSnapshot()
     var files: [JunkFile] = []

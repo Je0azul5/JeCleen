@@ -22,6 +22,7 @@ struct ContentView: View {
                         case .overview: overview
                         case .storage: StorageView(model: model.storage)
                         case .cleanup: cleanup
+                        case .emptyFolders: EmptyFoldersView(model: model.emptyFolders)
                         case .memory: memory
                         case .processes: processes
                         }
@@ -30,7 +31,7 @@ struct ContentView: View {
                 }
                 HStack(spacing: 7) {
                     Circle().fill(model.lastUpdate == nil ? muted : accent).frame(width: 5, height: 5)
-                    Text(model.page == .storage ? "Almacenamiento · análisis manual por carpeta" : model.lastUpdate == nil ? "Conectando con tu Mac…" : "Datos locales · actualización cada 5 segundos")
+                    Text(model.page == .emptyFolders ? "Carpetas vacías · revisión antes de limpiar" : model.page == .storage ? "Almacenamiento · análisis manual por carpeta" : model.lastUpdate == nil ? "Conectando con tu Mac…" : "Datos locales · actualización cada 5 segundos")
                     Spacer()
                     Text("JeCleen  /  1.0").monospaced()
                 }.font(.system(size: 10)).foregroundStyle(muted).padding(.horizontal, 32).padding(.vertical, 13)
